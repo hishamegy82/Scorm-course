@@ -4,16 +4,32 @@
 <meta name='viewport' content='initial-scale = 1, minimum-scale = 1, maximum-scale = 1'/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="x-ua-compatible" content="IE=10">
-<title></title>
-<style type="text/css">#initialLoading{background:url(assets/htmlimages/loader.gif) no-repeat center center;background-color:#ffffff;position:absolute;margin:auto;top:0;left:0;right:0;bottom:0;z-index:10010;}</style>
+<title>SCORM Course</title>
+<style type="text/css">
+  #initialLoading {
+    background: url(assets/htmlimages/loader.gif) no-repeat center center;
+    background-color: #ffffff;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10010;
+  }
+</style>
 
-"
-"
-<!-- Fake SCORM API to prevent LMS error -->
+<!-- ✅ Fake SCORM API -->
 <script>
   window.API = {
-    LMSInitialize: function() { return "true"; },
-    LMSFinish: function() { return "true"; },
+    LMSInitialize: function() {
+      if (typeof gtag === 'function') gtag('event', 'CourseStarted');
+      return "true";
+    },
+    LMSFinish: function() {
+      if (typeof gtag === 'function') gtag('event', 'CourseCompleted');
+      return "true";
+    },
     LMSGetValue: function(name) { return ""; },
     LMSSetValue: function(name, value) { return "true"; },
     LMSCommit: function() { return "true"; },
@@ -23,8 +39,15 @@
   };
 </script>
 
+<!-- ✅ Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VGK4EY7VMT"></script>
 <script>
-
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VGK4EY7VMT');
+</script>
+<script>
 var deviceReady = false;
 var initCalled = false ;
 var initialized = false;
