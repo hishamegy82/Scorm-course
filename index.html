@@ -9,6 +9,19 @@
 
 "
 "
+<!-- Fake SCORM API to prevent LMS error -->
+<script>
+  window.API = {
+    LMSInitialize: function() { return "true"; },
+    LMSFinish: function() { return "true"; },
+    LMSGetValue: function(name) { return ""; },
+    LMSSetValue: function(name, value) { return "true"; },
+    LMSCommit: function() { return "true"; },
+    LMSGetLastError: function() { return "0"; },
+    LMSGetErrorString: function(code) { return "No error"; },
+    LMSGetDiagnostic: function(code) { return "No diagnostic available"; }
+  };
+</script>
 
 <script>
 
