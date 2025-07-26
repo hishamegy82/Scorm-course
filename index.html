@@ -46,12 +46,22 @@
     LMSGetDiagnostic: function () { return "No diagnostic available"; }
   };
 
-  window.API = fakeAPI;
-  window.parent.API = fakeAPI;
-  window.top.API = fakeAPI;
+ window._fakeAPI = fakeAPI;
+window.parent._fakeAPI = fakeAPI;
+window.top._fakeAPI = fakeAPI;
 })();
 </script>
-
+<script>
+  // SCORM API compatibility patch for early LMS lookup
+  Object.defineProperty(window, 'API', {
+    get: function() {
+      return window._fakeAPI || null;
+    },
+    set: function(value) {
+      window._fakeAPI = value;
+    }
+  });
+</script>
 <!-- ✅ Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-VGK4EY7VMT"></script>
 <script>
