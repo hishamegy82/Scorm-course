@@ -5,7 +5,46 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="x-ua-compatible" content="IE=10">
   <title>SCORM Course</title>
+<!-- ✅ SCORM + GA4 INJECTION START -->
+<script>
+(function () {
+  const fakeAPI = {
+    LMSInitialize: function () {
+      console.log("✅ LMSInitialize triggered");
+      if (typeof gtag === 'function') {
+        gtag('event', 'CourseStarted', { debug_mode: true });
+      }
+      return "true";
+    },
+    LMSFinish: function () {
+      console.log("✅ LMSFinish triggered");
+      if (typeof gtag === 'function') {
+        gtag('event', 'CourseCompleted', { debug_mode: true });
+      }
+      return "true";
+    },
+    LMSGetValue: function (name) { return ""; },
+    LMSSetValue: function (name, value) { return "true"; },
+    LMSCommit: function () { return "true"; },
+    LMSGetLastError: function () { return "0"; },
+    LMSGetErrorString: function (code) { return "No error"; },
+    LMSGetDiagnostic: function (code) { return "No diagnostic available"; }
+  };
 
+  window.API = fakeAPI;
+  window.parent.API = fakeAPI;
+  window.top.API = fakeAPI;
+})();
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VGK4EY7VMT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-VGK4EY7VMT');
+</script>
+<!-- ✅ SCORM + GA4 INJECTION END -->
   <style type="text/css">
     #initialLoading {
       background: url(assets/htmlimages/loader.gif) no-repeat center center;
