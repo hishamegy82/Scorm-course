@@ -3,19 +3,10 @@
 <head>
   <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="x-ua-compatible" content="IE=10" />
-  <title>SCORM Course with GA4</title>
+  <meta http-equiv="x-ua-compatible" content="IE=10">
+  <title>SCORM Course</title>
 
-  <!-- ✅ Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VGK4EY7VMT"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-VGK4EY7VMT');
-  </script>
-
-  <!-- ✅ Inject Fake SCORM API -->
+  <!-- ✅ SCORM + GA4 INJECTION START -->
   <script>
     (function () {
       const fakeAPI = {
@@ -47,66 +38,76 @@
     })();
   </script>
 
-  <!-- ✅ Styles -->
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      text-align: center;
-      background-color: #f0f0f0;
-    }
+  <!-- ✅ Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VGK4EY7VMT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-VGK4EY7VMT');
+  </script>
 
+  <style>
     #initialLoading {
-      background: url('assets/htmlimages/loader.gif') no-repeat center center;
+      background: url(assets/htmlimages/loader.gif) no-repeat center center;
       background-color: #ffffff;
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       z-index: 10010;
     }
-
-    #courseContainer {
-      display: none;
-      padding-top: 100px;
-      font-size: 24px;
-      color: #333;
-    }
   </style>
 </head>
-
 <body onload="onBodyLoad()">
-  <!-- 🔄 Loading Spinner -->
-  <div id="initialLoading">Loading...</div>
+  <div id="initialLoading"></div>
 
-  <!-- ✅ Placeholder where course would appear -->
-  <div id="courseContainer">
-    ✅ Your SCORM Course is now loaded.<br />
-    (You may now simulate LMSInitialize/LMSFinish)
-  </div>
-
-  <!-- ✅ Loader script -->
   <script>
-    function onBodyLoad() {
-      console.log("✅ Page loaded");
-      // Simulate real loading (1 sec)
-      setTimeout(function () {
-        document.getElementById('initialLoading').style.display = 'none';
-        document.getElementById('courseContainer').style.display = 'block';
+    var deviceReady = false, initCalled = false, initialized = false;
 
-        // Simulate SCORM event
-        if (typeof API !== 'undefined' && typeof API.LMSInitialize === 'function') {
-          API.LMSInitialize();
-        }
-      }, 1000);
+    function onBodyLoad() {
+      console.log("✅ Body Loaded");
+      if (typeof window.device === 'undefined') {
+        document.addEventListener("deviceready", onDeviceReady, false);
+      } else {
+        onDeviceReady();
+      }
     }
 
-    // Optional: Simulate end of course after 5 seconds
-    setTimeout(() => {
-      if (typeof API !== 'undefined' && typeof API.LMSFinish === 'function') {
-        API.LMSFinish();
+    function onDeviceReady() {
+      deviceReady = true;
+      if (initCalled) initializeCP();
+    }
+
+    function initializeCP() {
+      if (initialized) return;
+      initCalled = true;
+      if (!deviceReady) return;
+
+      document.body.innerHTML = `
+        <div class='cpMainContainer' id='cpDocument'>
+          <div id='main_container' style='top:0px;position:absolute;'>
+            <div id='projectBorder' style='top:0px;left:0px;position:absolute;display:block'></div>
+            <div class='shadow' id='project_container' style='left: 0px; top:0px;position:absolute;'>
+              <div id='project' class='cp-movie' style='width:1024px ;height:627px'>
+                <div id='project_main' class='cp-timeline cp-main'>
+                  <div id='div_Slide' onclick='cp.handleClick(event)' style='top:0px; width:1024px ;height:627px ;position:absolute;-webkit-tap-highlight-color: rgba(0,0,0,0);'></div>
+                  <canvas id='slide_transition_canvas'></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id='initialLoading'></div>
+        </div>`;
+
+      if (typeof cp !== 'undefined' && typeof cp.DoCPInit === 'function') {
+        cp.DoCPInit();
       }
-    }, 6000);
+
+      initialized = true;
+    }
   </script>
 
-  <noscript style="text-align:center;font-size:24px;">Enable JavaScript to view this content.</noscript>
+  <noscript style="text-align:center;font-size:24px;">
+    Enable Javascript support in the browser.
+  </noscript>
 </body>
 </html>
