@@ -103,24 +103,38 @@
 
 <body onload="onBodyLoad()">
   <div id="initialLoading"></div>
+<!-- Captivate Runtime Loader -->
+<script>
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'assets/js/CPXHRLoader.js';
+      script.defer = true;
 
-  <script>
-    function onBodyLoad() {
-      console.log("✅ Body Loaded");
-      if (typeof window.device === 'undefined') {
-        document.addEventListener("deviceready", onDeviceReady, false);
-      } else {
-        onDeviceReady();
-      }
-    }
+      script.onload = function () {
+        const cssLoaded = false;
+        const jsLoaded = false;
 
-    function onDeviceReady() {
-      console.log("✅ Device Ready");
-    }
-  </script>
+        function constructDIVs() {
+          if (cssLoaded && jsLoaded) {
+            if (typeof initializeCP === "function") {
+              initializeCP();
+            }
+          }
+        }
 
-  <noscript style="text-align:center;font-size:24px;">
-    Enable Javascript support in the browser.
-  </noscript>
-</body>
-</html>
+        const lJSFiles = ['assets/js/jquery-3.3.1.min.js', 'scormdriver.js', 'assets/js/CPM.js', 'assets/playbar/playbarScript.js'];
+
+        // Load JS/CSS dynamically (Captivate runtime)
+        if (typeof cpXHRJSLoader !== 'undefined') {
+          cpXHRJSLoader.js(lJSFiles, function () {
+            // More logic here if needed
+          });
+        }
+      };
+
+      document.head.appendChild(script);
+    }, 10);
+  });
+</script>
