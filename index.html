@@ -4,6 +4,26 @@
 <meta name='viewport' content='initial-scale = 1, minimum-scale = 1, maximum-scale = 1'/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="x-ua-compatible" content="IE=10">
+	<!-- ✅ EARLY Fake SCORM API for GA4 Tracking -->
+<script>
+  window.API = {
+    LMSInitialize: function() {
+      if (typeof gtag === 'function') gtag('event', 'CourseStarted', { debug_mode: true });
+      return "true";
+    },
+    LMSFinish: function() {
+      if (typeof gtag === 'function') gtag('event', 'CourseCompleted', { debug_mode: true });
+      return "true";
+    },
+    LMSGetValue: function(name) { return ""; },
+    LMSSetValue: function(name, value) { return "true"; },
+    LMSCommit: function() { return "true"; },
+    LMSGetLastError: function() { return "0"; },
+    LMSGetErrorString: function(code) { return "No error"; },
+    LMSGetDiagnostic: function(code) { return "No diagnostic available"; }
+  };
+</script>
+
 <title>SCORM Course</title>
 <style type="text/css">
   #initialLoading {
