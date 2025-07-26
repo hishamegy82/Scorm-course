@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name='viewport' content='initial-scale = 1, minimum-scale = 1, maximum-scale = 1'/>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="x-ua-compatible" content="IE=10">
-	<!-- ✅ EARLY Fake SCORM API for GA4 Tracking -->
+
+<!-- ✅ GLOBAL FAKE SCORM API INJECTION -->
 <script>
-  window.API = {
+(function() {
+  const fakeAPI = {
     LMSInitialize: function() {
       if (typeof gtag === 'function') gtag('event', 'CourseStarted', { debug_mode: true });
       return "true";
@@ -22,9 +21,19 @@
     LMSGetErrorString: function(code) { return "No error"; },
     LMSGetDiagnostic: function(code) { return "No diagnostic available"; }
   };
+
+  // Inject into all global scopes
+  window.API = fakeAPI;
+  window.parent.API = fakeAPI;
+  window.top.API = fakeAPI;
+  console.log("✅ Fake SCORM API injected");
+})();
 </script>
 
-<title>SCORM Course</title>
+<!-- META and Title -->
+<meta name='viewport' content='initial-scale = 1, minimum-scale = 1, maximum-scale = 1'/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="IE=10"><title>SCORM Course</title>
 <style type="text/css">
   #initialLoading {
     background: url(assets/htmlimages/loader.gif) no-repeat center center;
