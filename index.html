@@ -20,24 +20,38 @@
   }
 </style>
 
-<!-- ✅ Fake SCORM API -->
+<!-- ✅ Inject Fake LMS API Early -->
 <script>
-  window.API = {
-    LMSInitialize: function() {
-      if (typeof gtag === 'function') gtag('event', 'CourseStarted');
+(function () {
+  const fakeAPI = {
+    LMSInitialize: function () {
+      console.log("✅ LMSInitialize called");
+      if (typeof gtag === 'function') {
+        gtag('event', 'CourseStarted', { debug_mode: true });
+      }
       return "true";
     },
-    LMSFinish: function() {
-      if (typeof gtag === 'function') gtag('event', 'CourseCompleted');
+    LMSFinish: function () {
+      console.log("✅ LMSFinish called");
+      if (typeof gtag === 'function') {
+        gtag('event', 'CourseCompleted', { debug_mode: true });
+      }
       return "true";
     },
-    LMSGetValue: function(name) { return ""; },
-    LMSSetValue: function(name, value) { return "true"; },
-    LMSCommit: function() { return "true"; },
-    LMSGetLastError: function() { return "0"; },
-    LMSGetErrorString: function(code) { return "No error"; },
-    LMSGetDiagnostic: function(code) { return "No diagnostic available"; }
+    LMSGetValue: function () { return ""; },
+    LMSSetValue: function () { return "true"; },
+    LMSCommit: function () { return "true"; },
+    LMSGetLastError: function () { return "0"; },
+    LMSGetErrorString: function () { return "No error"; },
+    LMSGetDiagnostic: function () { return "No diagnostic available"; }
   };
+
+  window.API = fakeAPI;
+  window.parent.API = fakeAPI;
+  window.top.API = fakeAPI;
+})();
+</script>
+
 </script>
 
 <!-- ✅ Google Analytics -->
