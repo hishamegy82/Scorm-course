@@ -101,7 +101,9 @@
       if (typeof cp !== 'undefined' && typeof cp.DoCPInit === 'function') {
         cp.DoCPInit();
       }
-
+// ✅ Hide loader after init
+      var loader = document.getElementById('initialLoading');
+      if (loader) loader.style.display = 'none';
       initialized = true;
     }
   </script>
